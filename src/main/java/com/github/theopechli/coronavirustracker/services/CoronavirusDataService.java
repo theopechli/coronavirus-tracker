@@ -1,6 +1,7 @@
 package com.github.theopechli.coronavirustracker.services;
 
 import com.github.theopechli.coronavirustracker.modules.LocationStats;
+import com.univocity.parsers.common.processor.RowListProcessor;
 import com.univocity.parsers.csv.CsvParser;
 import com.univocity.parsers.csv.CsvParserSettings;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -22,6 +23,15 @@ public class CoronavirusDataService {
 
     private final static String COVID_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
     private List<LocationStats> allLocationStats = new ArrayList<>();
+    private String[] headers;
+
+    public String[] getHeaders() {
+        return headers;
+    }
+
+    public List<LocationStats> getAllLocationStats() {
+        return allLocationStats;
+    }
 
     @PostConstruct
     @Scheduled(cron = "* * 1 * * *")
@@ -35,14 +45,20 @@ public class CoronavirusDataService {
         HttpResponse<String> httpResponse = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
         StringReader csvBodyReader = new StringReader(httpResponse.body());
 
+        RowListProcessor rowProcessor = new RowListProcessor();
+
         CsvParserSettings csvParserSettings = new CsvParserSettings();
         csvParserSettings.getFormat().setLineSeparator("\n");
         csvParserSettings.setHeaderExtractionEnabled(true);
+        csvParserSettings.setProcessor(rowProcessor);
 
         CsvParser csvParser = new CsvParser(csvParserSettings);
+        csvParser.parse(csvBodyReader);
 
-        List<String[]> allRows = csvParser.parseAll(csvBodyReader);
-        for (String[] row : allRows) {
+        headers = rowProcessor.getHeaders();
+        List<String[]> rows = rowProcessor.getRows();
+
+        for (String[] row : rows) {
             LocationStats locationStats = new LocationStats();
 
             locationStats.setState(row[0]);

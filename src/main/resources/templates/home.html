@@ -4,22 +4,73 @@
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html">
     <title>Coronavirus Tracker</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2
+        }
+
+        th {
+            background-color: green;
+            color: white;
+        }
+
+        #new-cases {
+            background: red;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .header {
+            background-color: #f1f1f1;
+        }
+    </style>
 </head>
 <body>
 
-<table>
-    <tr>
-        <th th:each="header: ${headers}" th:text="${header}"></th>
-    </tr>
+<div class="container">
+    <h1>Coronavirus Tracker Application</h1>
+    <p>This applications lists the number of confirmed COVID-19 cases, by location and dates.</p>
 
-    <tr th:each="locationStats : ${allLocationStats}">
-        <td th:text="${locationStats.getState()}"></td>
-        <td th:text="${locationStats.getCountry()}"></td>
-        <td th:text="${locationStats.getLatitude()}">0</td>
-        <td th:text="${locationStats.getLongitude()}">0</td>
-        <td th:each="totalCases : ${locationStats.getTotalCases()}" th:text="${totalCases}">0</td>
-    </tr>
-</table>
+    <div class="header">
+        <h1 th:text="${totalCases}"></h1>
+        <p>Total cases reported as of today.</p>
+        <hr>
+        <h1 th:text="${totalNewCases}"></h1>
+        <p>Total new cases reported since previous day.</p>
+    </div>
+
+    <table>
+        <thead>
+        <tr>
+            <th th:each="header: ${headers}" th:text="${header}"></th>
+            <th>New reported cases</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="locationStats : ${allLocationStats}">
+            <td th:text="${locationStats.getState()}"></td>
+            <td th:text="${locationStats.getCountry()}"></td>
+            <td th:text="${locationStats.getLatitude()}">0</td>
+            <td th:text="${locationStats.getLongitude()}">0</td>
+            <td th:each="totalCases : ${locationStats.getTotalCases()}" th:text="${totalCases}">0</td>
+            <td id="new-cases" th:text="${locationStats.getDiffFromPrevDay()}">0</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
 
 </body>
 </html>

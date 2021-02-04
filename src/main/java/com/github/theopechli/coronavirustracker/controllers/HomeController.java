@@ -1,10 +1,13 @@
 package com.github.theopechli.coronavirustracker.controllers;
 
+import com.github.theopechli.coronavirustracker.modules.LocationStats;
 import com.github.theopechli.coronavirustracker.services.CoronavirusDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.util.List;
 
 @Controller
 public class HomeController {
@@ -14,8 +17,20 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model) {
-        model.addAttribute("allLocationStats", coronavirusDataService.getAllLocationStats());
+        List<LocationStats> allLocationStats = coronavirusDataService.getAllLocationStats();
+        long totalCases = allLocationStats.stream()
+                .mapToLong(locationStats -> Long.parseLong(locationStats
+                        .getTotalCases()[locationStats.getTotalCases().length - 1]))
+                .sum();
+        long totalNewCases = allLocationStats.stream()
+                .mapToLong(LocationStats::getDiffFromPrevDay)
+                .sum();
+
         model.addAttribute("headers", coronavirusDataService.getHeaders());
+        model.addAttribute("allLocationStats", allLocationStats);
+        model.addAttribute("totalCases", totalCases);
+        model.addAttribute("totalNewCases", totalNewCases);
+
         return "home";
     }
 

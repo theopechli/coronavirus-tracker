@@ -6,9 +6,10 @@ public class LocationStats {
 
     private String state;
     private String country;
-    private double latitude;
-    private double longitude;
+    private String latitude;
+    private String longitude;
     private String[] totalCases;
+    private Long diffFromPrevDay;
 
     public String getState() {
         return state;
@@ -26,19 +27,19 @@ public class LocationStats {
         this.country = country;
     }
 
-    public double getLatitude() {
+    public String getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(double latitude) {
+    public void setLatitude(String latitude) {
         this.latitude = latitude;
     }
 
-    public double getLongitude() {
+    public String getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(double longitude) {
+    public void setLongitude(String longitude) {
         this.longitude = longitude;
     }
 
@@ -48,6 +49,14 @@ public class LocationStats {
 
     public void setTotalCases(String[] totalCases) {
         this.totalCases = totalCases;
+    }
+
+    public Long getDiffFromPrevDay() {
+        return diffFromPrevDay;
+    }
+
+    public void setDiffFromPrevDay(Long diffFromPrevDay) {
+        this.diffFromPrevDay = diffFromPrevDay;
     }
 
     @Override

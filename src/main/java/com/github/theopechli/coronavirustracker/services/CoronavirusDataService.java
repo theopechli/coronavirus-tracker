@@ -60,14 +60,14 @@ public class CoronavirusDataService {
 
         for (String[] row : rows) {
             LocationStats locationStats = new LocationStats();
+            int rowLength = row.length;
 
             locationStats.setState(row[0]);
             locationStats.setCountry(row[1]);
-            if (row[2] != null && row[3] != null) {
-                locationStats.setLatitude(Double.parseDouble(row[2]));
-                locationStats.setLongitude(Double.parseDouble(row[3]));
-            }
-            locationStats.setTotalCases(Arrays.copyOfRange(row, 4, row.length));
+            locationStats.setLatitude(row[2]);
+            locationStats.setLongitude(row[3]);
+            locationStats.setTotalCases(Arrays.copyOfRange(row, 4, rowLength));
+            locationStats.setDiffFromPrevDay(Long.parseLong(row[rowLength - 1]) - Long.parseLong(row[rowLength - 2]));
 
             newLocationStats.add(locationStats);
         }

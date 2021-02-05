@@ -24,11 +24,6 @@
             color: white;
         }
 
-        #new-cases {
-            background: red;
-            font-weight: bold;
-        }
-
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
@@ -46,27 +41,31 @@
 
     <div class="header">
         <h1 th:text="${totalCases}"></h1>
-        <p>Total cases reported as of today.</p>
+        <p>Total reported cases as of today.</p>
         <hr>
         <h1 th:text="${totalNewCases}"></h1>
-        <p>Total new cases reported since previous day.</p>
+        <p>Total new reported cases since previous day.</p>
     </div>
 
     <table>
         <thead>
         <tr>
-            <th th:each="header: ${headers}" th:text="${header}"></th>
+            <th>Province/State</th>
+            <th>Country/Region</th>
+            <th>Latitude</th>
+            <th>Longitude</th>
+            <th>Reported cases</th>
             <th>New reported cases</th>
         </tr>
         </thead>
         <tbody>
         <tr th:each="locationStats : ${allLocationStats}">
-            <td th:text="${locationStats.getState()}"></td>
-            <td th:text="${locationStats.getCountry()}"></td>
+            <td th:text="${locationStats.getProvince()}"></td>
+            <td th:text="${locationStats.getRegion()}"></td>
             <td th:text="${locationStats.getLatitude()}">0</td>
             <td th:text="${locationStats.getLongitude()}">0</td>
-            <td th:each="totalCases : ${locationStats.getTotalCases()}" th:text="${totalCases}">0</td>
-            <td id="new-cases" th:text="${locationStats.getDiffFromPrevDay()}">0</td>
+            <td th:text="${locationStats.getTotalCases()}">0</td>
+            <td th:text="${locationStats.getDiffFromPrevDay()}">0</td>
         </tr>
         </tbody>
     </table>

@@ -1,53 +1,51 @@
 package com.github.theopechli.coronavirustracker.modules;
 
-import java.util.Arrays;
-
 public class LocationStats {
 
-    private String state;
-    private String country;
-    private String latitude;
-    private String longitude;
-    private String[] totalCases;
-    private Long diffFromPrevDay;
+    private String province;
+    private String region;
+    private double latitude;
+    private double longitude;
+    private long totalCases;
+    private long diffFromPrevDay;
 
-    public String getState() {
-        return state;
+    public String getProvince() {
+        return province;
     }
 
-    public void setState(String state) {
-        this.state = state;
+    public void setProvince(String province) {
+        this.province = province;
     }
 
-    public String getCountry() {
-        return country;
+    public String getRegion() {
+        return region;
     }
 
-    public void setCountry(String country) {
-        this.country = country;
+    public void setRegion(String region) {
+        this.region = region;
     }
 
-    public String getLatitude() {
+    public double getLatitude() {
         return latitude;
     }
 
-    public void setLatitude(String latitude) {
+    public void setLatitude(double latitude) {
         this.latitude = latitude;
     }
 
-    public String getLongitude() {
+    public double getLongitude() {
         return longitude;
     }
 
-    public void setLongitude(String longitude) {
+    public void setLongitude(double longitude) {
         this.longitude = longitude;
     }
 
-    public String[] getTotalCases() {
+    public long getTotalCases() {
         return totalCases;
     }
 
-    public void setTotalCases(String[] totalCases) {
+    public void setTotalCases(long totalCases) {
         this.totalCases = totalCases;
     }
 
@@ -62,11 +60,11 @@ public class LocationStats {
     @Override
     public String toString() {
         return "LocationStats{" +
-                "state='" + state + '\'' +
-                ", country='" + country + '\'' +
+                "province='" + province + '\'' +
+                ", region='" + region + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
-                ", totalCases=" + Arrays.toString(totalCases) +
+                ", totalCases=" + totalCases +
                 '}';
     }
 }

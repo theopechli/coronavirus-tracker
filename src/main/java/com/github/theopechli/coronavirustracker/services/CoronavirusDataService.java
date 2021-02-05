@@ -15,7 +15,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -23,11 +22,6 @@ public class CoronavirusDataService {
 
     private final static String COVID_DATA_URL = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_covid19_confirmed_global.csv";
     private List<LocationStats> allLocationStats = new ArrayList<>();
-    private String[] headers;
-
-    public String[] getHeaders() {
-        return headers;
-    }
 
     public List<LocationStats> getAllLocationStats() {
         return allLocationStats;
@@ -55,19 +49,23 @@ public class CoronavirusDataService {
         CsvParser csvParser = new CsvParser(csvParserSettings);
         csvParser.parse(csvBodyReader);
 
-        headers = rowProcessor.getHeaders();
         List<String[]> rows = rowProcessor.getRows();
 
         for (String[] row : rows) {
             LocationStats locationStats = new LocationStats();
             int rowLength = row.length;
 
-            locationStats.setState(row[0]);
-            locationStats.setCountry(row[1]);
-            locationStats.setLatitude(row[2]);
-            locationStats.setLongitude(row[3]);
-            locationStats.setTotalCases(Arrays.copyOfRange(row, 4, rowLength));
-            locationStats.setDiffFromPrevDay(Long.parseLong(row[rowLength - 1]) - Long.parseLong(row[rowLength - 2]));
+            locationStats.setProvince(row[0]);
+            locationStats.setRegion(row[1]);
+            if (row[2] != null) {
+                locationStats.setLatitude(Double.parseDouble(row[2]));
+            }
+            if (row[3] != null) {
+                locationStats.setLongitude(Double.parseDouble(row[3]));
+            }
+            locationStats.setTotalCases(Long.parseLong(row[rowLength - 1]));
+            locationStats.setDiffFromPrevDay(Math
+                    .abs(locationStats.getTotalCases() - Long.parseLong(row[rowLength - 2])));
 
             newLocationStats.add(locationStats);
         }

@@ -19,14 +19,12 @@ public class HomeController {
     public String home(Model model) {
         List<LocationStats> allLocationStats = coronavirusDataService.getAllLocationStats();
         long totalCases = allLocationStats.stream()
-                .mapToLong(locationStats -> Long.parseLong(locationStats
-                        .getTotalCases()[locationStats.getTotalCases().length - 1]))
+                .mapToLong(LocationStats::getTotalCases)
                 .sum();
         long totalNewCases = allLocationStats.stream()
                 .mapToLong(LocationStats::getDiffFromPrevDay)
                 .sum();
 
-        model.addAttribute("headers", coronavirusDataService.getHeaders());
         model.addAttribute("allLocationStats", allLocationStats);
         model.addAttribute("totalCases", totalCases);
         model.addAttribute("totalNewCases", totalNewCases);
